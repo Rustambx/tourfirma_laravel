@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  lara-nginx:
+    container_name: lara-nginx
+    build: ./docker/nginx
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 8080:80
+
+  lara-php:
+    container_name: lara-php
+    build: ./docker/php
+    ports:
+      - 9000:9000
+    volumes:
+      - .:/var/www/html
+      - ./docker/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+
+  lara-mysql:
+    container_name: lara-mysql
+    build: docker/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lara_db
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+    ports:
+      - 3306:3306
